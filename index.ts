@@ -2,7 +2,7 @@
 import './style.scss';
 //// THREE JS : https://threejs.org/docs/index.html#manual/en/introduction/
 import * as THREE from 'three';
-import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
+// import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import * as dat from 'dat.gui';
 
 // every three js project needs to have to have
@@ -16,8 +16,12 @@ import * as dat from 'dat.gui';
 // step 3 combine both to make mesh
 // step 4 add mesh to scene
 
+//Loader
+const textureLoader = new THREE.TextureLoader();
+const normalTexture = textureLoader.load('NormalMap.png');
+
 // Debug
-console.clear()
+console.clear();
 const gui = new dat.GUI();
 
 // Canvas
@@ -28,17 +32,17 @@ const scene = new THREE.Scene();
 
 // Objects
 // const geometry = new THREE.TorusGeometry(0.7, 0.2, 16, 100);
-const geometry = new THREE.SphereBufferGeometry(.5, 64, 64)
+const geometry = new THREE.SphereBufferGeometry(0.5, 64, 64);
 
 // Materials
 
 // const material = new THREE.MeshBasicMaterial();
 const material = new THREE.MeshStandardMaterial();
-material.metalness = 0.7
-material.roughness = 0.7
-material.color = new THREE.Color(0xff0000);
-// material.color = new THREE.Color(0x2929292);
-
+material.metalness = 0.7;
+material.roughness = 0.7;
+material.normalMap = normalTexture;
+// material.color = new THREE.Color(0xff0000);
+// material.color = new THREE.Color(0x292929);
 
 // Mesh
 const sphere = new THREE.Mesh(geometry, material);
@@ -51,6 +55,17 @@ pointLight.position.x = 2;
 pointLight.position.y = 3;
 pointLight.position.z = 4;
 scene.add(pointLight);
+
+const pointLight2 = new THREE.PointLight(0xff0000, 2);
+// pointLight.position.x = 2;
+// pointLight.position.y = 3;
+// pointLight.position.z = 4;
+pointLight2.intensity = 1;
+// pointLight2.position.set(0, 0, 0);
+pointLight2.position.set(1, 1, 1);
+scene.add(pointLight2);
+
+gui.add(pointLight2.position, 'y');
 
 /**
  * Sizes
@@ -98,7 +113,7 @@ scene.add(camera);
  */
 const renderer = new THREE.WebGLRenderer({
   canvas: canvas,
-  alpha:true,
+  alpha: true,
 });
 renderer.setSize(sizes.width, sizes.height);
 renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
